@@ -3,13 +3,13 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore, initializeFirestore, memoryLocalCache } from 'firebase/firestore';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyD85mrLZxE2q1Xrx1dfVcXRgodowLWYfzE",
-    authDomain: "mygoal-ai-planner-86a11.firebaseapp.com",
-    projectId: "mygoal-ai-planner-86a11",
-    storageBucket: "mygoal-ai-planner-86a11.firebasestorage.app",
-    messagingSenderId: "119705216292",
-    appId: "1:119705216292:web:3f8c4bf1c3d2ea5c733fb1",
-    measurementId: "G-H1WDKBQCJY"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase (prevent duplicate initialization in dev)
