@@ -1,0 +1,1139 @@
+.dashboardLayout {
+    min-height: 100vh;
+    background: #FAFAFA;
+    position: relative;
+}
+
+.sidebar {
+    position: fixed;
+    left: 2rem;
+    top: 2rem;
+    bottom: 9rem;
+    /* Stop before chat bar */
+    width: 250px;
+    background: #FFFFFF;
+    border-radius: 24px;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    z-index: 40;
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08), 0 0 2px rgba(0, 0, 0, 0.05);
+    overflow-y: auto;
+}
+
+.sidebarTitle {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #8E8E93;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.05em;
+}
+
+.goalList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.goalItem {
+    padding: 0.85rem 1rem;
+    background: white;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #1C1C1E;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.goalItem:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: #EAEAEA;
+}
+
+.mainContent {
+    position: relative;
+    width: 100%;
+}
+
+.dashboard {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    padding-bottom: 8rem;
+    font-family: var(--font-inter);
+}
+
+/* Header Redesign */
+.headerDaily {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.logoDaily {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #1a1a1a;
+}
+
+.dateWeatherContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+
+.headerRight {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+/* Profile Section */
+.profileSection {
+    position: relative;
+}
+
+.profileButton {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: #f0f0f0;
+    padding: 0;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.2s;
+}
+
+.profileButton:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.profileImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profileAvatar {
+    width: 100%;
+    height: 100%;
+    background: #1a1a1a;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.profileDropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.5rem;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    min-width: 200px;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.profileDropdownHeader {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.profileEmail {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.profileMenuItem {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s;
+}
+
+.profileMenuItem:hover {
+    background: #f5f5f5;
+}
+
+.headerActions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.createWithAIBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    background: #1a1a1a;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.createWithAIBtn:hover {
+    background: #333;
+}
+
+.currentDate {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.weatherWidget {
+    display: flex;
+    gap: 0.5rem;
+    background: #F5F5F5;
+    padding: 0.25rem;
+    border-radius: 99px;
+}
+
+.weatherIcon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+    color: #999;
+}
+
+.weatherIcon:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.weatherIcon.selected {
+    background: white;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Calendar Strip */
+.calendarStrip {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding: 0.5rem 0 1.5rem 0;
+    margin-bottom: 2rem;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
+}
+
+.calendarStrip::-webkit-scrollbar {
+    display: none;
+}
+
+.calendarDay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 48px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.2s;
+}
+
+.calendarDay:hover {
+    opacity: 0.8;
+}
+
+.calendarDay.active {
+    opacity: 1;
+}
+
+.dayLabel {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.dateCircle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #F0F0F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #333;
+    transition: all 0.2s;
+}
+
+.calendarDay.active .dateCircle {
+    background: #1a1a1a;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: scale(1.1);
+}
+
+/* Original Components adjustments */
+.sectionTitle {
+    font-family: var(--font-serif);
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.sectionTitle::before {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    background: #1a1a1a;
+    border-radius: 50%;
+}
+
+.taskList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.taskCard {
+    background: white;
+    border: 1px solid #EAEAEA;
+    border-radius: 16px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.taskCard:hover {
+    border-color: #CCC;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.taskCard.completed .taskText {
+    text-decoration: line-through;
+    color: #AAA;
+}
+
+.checkbox {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #E0E0E0;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.1rem;
+    transition: all 0.2s;
+}
+
+.taskCard.completed .checkbox {
+    background: #666;
+    border-color: #666;
+    color: white;
+}
+
+.taskText {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.4;
+    flex: 1;
+}
+
+/* User Tasks Section */
+.userSection {
+    border-top: 1px solid #EAEAEA;
+    padding-top: 2rem;
+    margin-bottom: 4rem;
+}
+
+.addNoteInput {
+    width: 100%;
+    padding: 1rem;
+    border: 1px dashed #DDD;
+    border-radius: 12px;
+    font-family: var(--font-inter);
+    font-size: 1rem;
+    outline: none;
+    background: #FAFAFA;
+    transition: all 0.2s;
+}
+
+.addNoteInput:focus {
+    background: white;
+    border-color: #999;
+}
+
+.userTaskList {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.userTaskCard {
+    background: #FFF;
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid transparent;
+}
+
+.userTaskCard::before {
+    content: '•';
+    color: #999;
+    font-size: 1.5rem;
+    line-height: 0.5;
+}
+
+
+/* Footer Quote */
+.footerQuote {
+    text-align: center;
+    padding: 2rem;
+    color: #888;
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    font-family: var(--font-serif);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Reuse Review Styles */
+.reviewList {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.weekBlock {
+    margin-bottom: 2rem;
+}
+
+.weekTitle {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+.weekTheme {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+.dayBlock {
+    margin-left: 1rem;
+    margin-bottom: 1.5rem;
+    border-left: 2px solid #F0F0F0;
+    padding-left: 1rem;
+}
+
+.dayTitle {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.dayTasks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.miniTask {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Bottom Bar (Review Mode) */
+.bottomBar {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 700px;
+    background: white;
+    border: 1px solid #EAEAEA;
+    border-radius: 20px;
+    padding: 0.75rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    z-index: 100;
+}
+
+.inputWrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: #FAFAFA;
+    border-radius: 12px;
+    padding: 0 1rem;
+}
+
+.aiInput {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 1rem 0;
+    font-family: var(--font-inter);
+    font-size: 1rem;
+    outline: none;
+}
+
+.actionButton {
+    padding: 0.75rem 1.25rem;
+    border-radius: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+}
+
+.changeBtn {
+    background: #F0F0F0;
+    color: #333;
+}
+
+.continueBtn {
+    background: #1a1a1a;
+    color: white;
+}
+
+.loadingOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+}
+
+.dashboard {
+    padding-bottom: 2rem;
+}
+
+/* Override padding for standard view */
+.reviewModePadded {
+    padding-bottom: 8rem;
+}
+
+/* Extra padding only for review mode */
+
+/* Daily Progress Bar - NEW */
+.dailyProgressContainer {
+    margin: 1.5rem 0;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dailyProgressBar {
+    flex: 1;
+    height: 8px;
+    background: #E5E5E5;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.dailyProgressFill {
+    height: 100%;
+    background: #6B4423;
+    /* Brown tone like the image */
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.dailyProgressText {
+    font-size: 0.95rem;
+    color: #666;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.goalPercent {
+    font-size: 0.8rem;
+    color: #8E8E93;
+    font-weight: 400;
+}
+
+/* Edit Input */
+.editInput {
+    flex: 1;
+    border: 1px solid #DDD;
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+    background: #FAFAFA;
+}
+
+.editInput:focus {
+    border-color: #1a1a1a;
+    background: white;
+}
+
+/* Delete Button */
+.deleteBtn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: #999;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    opacity: 0;
+}
+
+.taskCard:hover .deleteBtn,
+.noteCard:hover .deleteBtn {
+    opacity: 1;
+}
+
+.deleteBtn:hover {
+    background: #FEE;
+    color: #C00;
+}
+
+/* Empty State */
+.emptyState {
+    color: #999;
+    font-style: italic;
+    padding: 2rem;
+    text-align: center;
+}
+
+/* Notes Section */
+.notesTitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #666;
+    margin: 2rem 0 1rem;
+}
+
+.notesList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.noteCard {
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.noteCard p {
+    flex: 1;
+    margin: 0;
+    color: #78350F;
+}
+
+/* Add Item Section with Type Selector */
+.addItemSection {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    padding: 0.5rem;
+    background: #FAFAFA;
+    border-radius: 16px;
+    border: 1px solid #EAEAEA;
+}
+
+.typeSelector {
+    position: relative;
+}
+
+.typeSelectorBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #E0E0E0;
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.typeSelectorBtn:hover {
+    border-color: #CCC;
+}
+
+.dropdownArrow {
+    font-size: 0.7rem;
+    color: #999;
+}
+
+.typeDropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 4px;
+    background: white;
+    border: 1px solid #E0E0E0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    z-index: 100;
+    min-width: 120px;
+}
+
+.typeOption {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.typeOption:hover {
+    background: #F5F5F5;
+}
+
+.addItemInput {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+}
+
+.mediaBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    background: white;
+    border-radius: 12px;
+    cursor: pointer;
+    color: #888;
+    font-size: 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.mediaBtn:hover {
+    background: #F0F0F0;
+    color: #333;
+}
+
+/* AI Chat Bar - Daily View */
+.dailyChatBar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem 2rem 2rem;
+    background: linear-gradient(transparent, white 20%);
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.chatInputWrapper {
+    flex: 1;
+    max-width: 500px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: white;
+    border: 1px solid #EAEAEA;
+    border-radius: 20px;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.addManualTaskBtn {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #EAEAEA;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+    color: #333;
+    flex-shrink: 0;
+}
+
+.addManualTaskBtn:hover {
+    transform: scale(1.05);
+    background: #F8F8F8;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.chatIcon {
+    font-size: 1.2rem;
+}
+
+.chatInput {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 0.5rem 0;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+}
+
+.chatInput:disabled {
+    opacity: 0.6;
+}
+
+.chatSendBtn {
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    border: none;
+    background: #1a1a1a;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.chatSendBtn:hover {
+    background: #333;
+}
+
+.chatSendBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.createPlanBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    background: #1a1a1a;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s;
+}
+
+.createPlanBtn:hover {
+    background: #333;
+    transform: translateY(-1px);
+}
+
+.aiProcessing {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #666;
+    padding: 0.5rem;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Fixed Sidebar Layout Override */
+.dashboardFixed {
+    min-height: 100vh;
+    background: transparent;
+    /* Changed from #FAFAFA to transparent or match body? */
+    /* Wait, .container has bg? No. I'll stick to FAFAFA or inherit. */
+    background: #FAFAFA;
+    position: relative;
+    /* Block layout */
+}
+
+.sidebarFixed {
+    position: fixed;
+    left: 2rem;
+    top: 2rem;
+    bottom: 9rem;
+    /* Ends before chat bar */
+    width: 250px;
+    background: #FFFFFF;
+    border-radius: 24px;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    z-index: 40;
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08), 0 0 2px rgba(0, 0, 0, 0.05);
+    overflow-y: auto;
+}
+
+
+
+.sidebarTitleFixed {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #8E8E93;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.05em;
+    padding-left: 0.5rem;
+    /* Better alignment */
+}
+
+/* Updated Goal Card with Progress */
+.goalItem {
+    padding: 0.85rem 1rem;
+    background: white;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #1C1C1E;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.goalItem:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: #EAEAEA;
+}
+
+.goalFill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: #EDEDF0;
+    /* Subtle fill color */
+    z-index: 0;
+    transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.goalContent {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+.selectedGoal {
+    border: 1px solid #007AFF;
+    /* Blue border for active */
+    box-shadow: 0 4px 12px rgba(0, 122, 255, 0.15);
+}
+
+.addGoalWrapper {
+    margin-top: auto;
+    /* Push to bottom of sidebar if enough space */
+    padding-top: 1rem;
+}
+
+.addGoalBtn {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px dashed #CCC;
+    border-radius: 12px;
+    background: transparent;
+    color: #666;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.addGoalBtn:hover {
+    border-color: #888;
+    color: #333;
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.contextLabel {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.goalListFixed {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.mainContent {
+    position: relative;
+    width: 100%;
+}
+
+/* Add Goal Modal */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.addGoalModal {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.addGoalModal h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    color: #1C1C1E;
+}
+
+.addGoalModal p {
+    margin: 0 0 1rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.addGoalInput {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #DDD;
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    box-sizing: border-box;
+}
+
+.addGoalInput:focus {
+    outline: none;
+    border-color: #007AFF;
+}
+
+.addGoalActions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+.cancelBtn {
+    padding: 0.6rem 1.25rem;
+    border: 1px solid #DDD;
+    border-radius: 8px;
+    background: white;
+    color: #666;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.createGoalBtn {
+    padding: 0.6rem 1.25rem;
+    border: none;
+    border-radius: 8px;
+    background: #1C1C1E;
+    color: white;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.createGoalBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

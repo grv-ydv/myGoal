@@ -1,0 +1,164 @@
+.wrapper {
+    width: 100%;
+    max-width: 42rem;
+    margin: 0 auto;
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.header {
+    margin-bottom: 1rem;
+}
+
+.label {
+    color: #888;
+    font-size: 0.9rem;
+    font-weight: 400;
+    text-transform: lowercase;
+}
+
+.suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chip:hover:not(:disabled) {
+    background: #f5f5f5;
+    border-color: #d0d0d0;
+    transform: translateY(-1px);
+}
+
+.chip:disabled {
+    cursor: default;
+}
+
+.chipAdded {
+    background: #e8f5e9;
+    border-color: #81c784;
+    color: #2e7d32;
+}
+
+.chipIcon {
+    font-size: 1rem;
+}
+
+.chipText {
+    font-weight: 400;
+}
+
+.checkmark {
+    color: #2e7d32;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.addCustom {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1px dashed #ccc;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.addCustom:hover:not(:disabled) {
+    background: #fafafa;
+    border-color: #999;
+    color: #333;
+}
+
+.customInputWrapper {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    overflow: hidden;
+}
+
+.customInput {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.customInput:focus {
+    border-color: #999;
+}
+
+.addBtn {
+    padding: 0.75rem 1.5rem;
+    background: #1a1a1a;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.addBtn:hover:not(:disabled) {
+    background: #333;
+}
+
+.addBtn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.addedList {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.addedLabel {
+    color: #888;
+}
+
+.addedTask {
+    background: #f0f0f0;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    color: #555;
+}
+
+@media (max-width: 640px) {
+    .suggestions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .chip,
+    .addCustom {
+        justify-content: center;
+    }
+}

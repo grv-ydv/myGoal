@@ -1,0 +1,148 @@
+"use client";
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import QuestionWizard from '@/components/QuestionWizard';
+import { useAuth } from '@/contexts/AuthContext';
+import { save_goal } from '@/lib/firestore';
+import styles from '../page.module.css';
+
+const STORAGE_KEY = 'myGoal_appData';
+
+export default function QuestionsPage() {
+    const router = useRouter();
+    const { user } = useAuth();
+    const [goal, setGoal] = useState('');
+    const [questions, setQuestions] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        // Load data from sessionStorage
+        const saved = sessionStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                if (parsed.goal) setGoal(parsed.goal);
+                if (parsed.questions && parsed.questions.length > 0) {
+                    setQuestions(parsed.questions);
+                } else {
+                    // No questions, redirect to home
+                    router.push('/');
+                    return;
+                }
+            } catch (e) {
+                console.error('Failed to parse sessionStorage:', e);
+                router.push('/');
+                return;
+            }
+        } else {
+            // No data, redirect to home
+            router.push('/');
+            return;
+        }
+        setIsLoading(false);
+    }, [router]);
+
+    const handleWizardFinish = async (answers: Record<number, string>) => {
+        setIsLoading(true);
+        console.log('🚀 [QuestionsPage] Starting plan generation with answers:', answers);
+
+        try {
+            console.log('📡 [QuestionsPage] Sending request to /api/generate-plan...');
+            const response = await fetch('/api/generate-plan', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    goal,
+                    answers: Object.entries(answers).map(([id, ans]) => ({ questionId: id, answer: ans }))
+                }),
+            });
+
+            console.log('📡 [QuestionsPage] Response status:', response.status);
+            const data = await response.json();
+            console.log('📦 [QuestionsPage] Response data:', data);
+
+            if (data.error) {
+                console.error('❌ [QuestionsPage] Server returned error:', data.error, data.details);
+                throw new Error(data.details ? `${data.error}: ${data.details}` : data.error);
+            }
+
+            console.log('✅ [QuestionsPage] Plan generated successfully:', data.title);
+
+            // Save plan to sessionStorage FIRST (for immediate use)
+            const saved = sessionStorage.getItem(STORAGE_KEY);
+            const current = saved ? JSON.parse(saved) : {};
+            sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ ...current, planData: data }));
+
+            // Redirect immediately - don't wait for Firestore
+            console.log('🔄 [QuestionsPage] Redirecting to /plan...');
+            router.push('/plan');
+
+            // Save to Firestore in background (non-blocking)
+            if (user?.uid) {
+                save_goal(user.uid, data, goal)
+                    .then((savedPlan) => {
+                        console.log('✅ Plan saved to Firestore with ID:', savedPlan.id);
+                        // Update sessionStorage with the real Firestore ID so plan/page.tsx can dedupe
+                        const currentSaved = sessionStorage.getItem(STORAGE_KEY);
+                        if (currentSaved) {
+                            try {
+                                const parsed = JSON.parse(currentSaved);
+                                if (parsed.planData) {
+                                    parsed.planData.firestoreId = savedPlan.id;
+                                    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+                                }
+                            } catch (e) {
+                                console.error('Failed to update sessionStorage with Firestore ID:', e);
+                            }
+                        }
+                    })
+                    .catch((err) => console.error('Failed to save to Firestore:', err));
+            }
+        } catch (error) {
+            console.error("❌ [QuestionsPage] Failed to generate plan:", error);
+            const errorMessage = error instanceof Error ? error.message : "Unknown error";
+            alert(`Failed to generate plan: ${errorMessage}`);
+            setIsLoading(false);
+        }
+    };
+
+    if (isLoading) {
+        return (
+            <main className={styles.main}>
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8 text-gray-500 font-inter">
+                    Generating your perfect plan...
+                </motion.div>
+            </main>
+        );
+    }
+
+    return (
+        <main className={styles.main}>
+            <motion.header
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                className={styles.header}
+            >
+                <div className={styles.iconWrapper}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor" />
+                    </svg>
+                </div>
+                <div className={styles.logo}>myGoal</div>
+            </motion.header>
+
+            <section className={styles.section}>
+                <div className={styles.container}>
+                    <QuestionWizard
+                        questions={questions}
+                        goal={goal}
+                        onFinish={handleWizardFinish}
+                    />
+                </div>
+            </section>
+        </main>
+    );
+}

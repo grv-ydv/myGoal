@@ -1,0 +1,257 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.modal {
+    background: #F2F2F7;
+    width: 100%;
+    max-width: 480px;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+    overflow: hidden;
+    font-family: var(--font-inter, sans-serif);
+}
+
+.header {
+    padding: 1rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border-bottom: 0.5px solid #C6C6C8;
+}
+
+.headerTitle {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #000;
+}
+
+.cancelBtn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: #FF3B30;
+    cursor: pointer;
+}
+
+.saveBtn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: #007AFF;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.saveBtn:disabled {
+    color: #C7C7CC;
+    cursor: default;
+}
+
+.content {
+    padding: 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Segment Control */
+.segmentControl {
+    display: flex;
+    background: #E3E3E8;
+    padding: 2px;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.segmentBtn {
+    flex: 1;
+    padding: 0.4rem;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.segmentBtn.active {
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Groups */
+.formGroup {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.field {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    border-bottom: 0.5px solid #C6C6C8;
+    min-height: 3rem;
+}
+
+.field:last-child {
+    border-bottom: none;
+}
+
+.input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    background: transparent;
+}
+
+.textarea {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    background: transparent;
+    resize: none;
+    font-family: inherit;
+    min-height: 4rem;
+    padding-top: 0.4rem;
+}
+
+.rowLabel {
+    width: 100px;
+    font-size: 1rem;
+    color: #000;
+}
+
+.rowValue {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 30px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #E9E9EA;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+input:checked+.slider {
+    background-color: #34C759;
+}
+
+input:checked+.slider:before {
+    transform: translateX(20px);
+}
+
+.dateInput,
+.timeInput {
+    border: none;
+    background: #F2F2F7;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    color: #007AFF;
+    font-weight: 500;
+    outline: none;
+    text-align: right;
+}
+
+/* Repeat Menu */
+.repeatMenuOverlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    border-radius: 16px;
+}
+
+.repeatMenu {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    width: 260px;
+    max-height: 360px;
+    overflow-y: auto;
+    border-radius: 14px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.repeatOption {
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    color: #000;
+    transition: background 0.2s;
+}
+
+.repeatOption:hover {
+    background: #F2F2F7;
+}
+
+.repeatOptionSelected {
+    background: #E5E5EA;
+    font-weight: 500;
+}
+
+.checkIcon {
+    color: #007AFF;
+    font-weight: 600;
+}

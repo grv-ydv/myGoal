@@ -1,0 +1,362 @@
+.dashboard {
+    min-height: 100vh;
+    padding: 2rem;
+    background: var(--bg-primary);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* User Menu */
+.userMenu {
+    position: relative;
+}
+
+.userButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.userAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 500;
+    overflow: hidden;
+}
+
+.userAvatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.userDropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.5rem;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    overflow: hidden;
+    z-index: 100;
+}
+
+.userEmail {
+    padding: 1rem;
+    font-size: 0.85rem;
+    color: #666;
+    border-bottom: 1px solid #eee;
+}
+
+.logoutBtn {
+    width: 100%;
+    padding: 1rem;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    color: #c00;
+    font-size: 0.95rem;
+}
+
+.logoutBtn:hover {
+    background: #f9f9f9;
+}
+
+/* Date Display */
+.dateDisplay {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.greeting {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.date {
+    color: #888;
+    font-size: 1.1rem;
+}
+
+/* Action Buttons */
+.actionButtons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.addManuallyBtn,
+.createWithAIBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.addManuallyBtn {
+    background: white;
+    border: 1px solid #e0e0e0;
+    color: #333;
+}
+
+.addManuallyBtn:hover {
+    background: #f5f5f5;
+    border-color: #ccc;
+}
+
+.createWithAIBtn {
+    background: #1a1a1a;
+    border: none;
+    color: white;
+}
+
+.createWithAIBtn:hover {
+    background: #333;
+}
+
+.btnIcon {
+    font-size: 1.1rem;
+}
+
+/* Tasks Section */
+.tasksSection {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.sectionTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.taskCount {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.progressBar {
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: #22c55e;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.taskList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.taskCard {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e8e8e8;
+    transition: all 0.2s ease;
+}
+
+.taskCard:hover {
+    border-color: #ddd;
+}
+
+.taskCard.completed {
+    opacity: 0.6;
+}
+
+.taskCard.completed .taskText {
+    text-decoration: line-through;
+    color: #888;
+}
+
+.checkbox {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.checkbox:hover {
+    border-color: #999;
+}
+
+.taskCard.completed .checkbox {
+    background: #22c55e;
+    border-color: #22c55e;
+    color: white;
+}
+
+.taskText {
+    flex: 1;
+    color: var(--text-primary);
+}
+
+/* Empty State */
+.emptyState {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #888;
+}
+
+.emptyState p:first-child {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.emptyHint {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+/* Modal */
+.modalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modalTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.modalInput {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    outline: none;
+}
+
+.modalInput:focus {
+    border-color: #999;
+}
+
+.modalActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.cancelBtn {
+    padding: 0.75rem 1.25rem;
+    background: none;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    color: #666;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.cancelBtn:hover {
+    background: #f5f5f5;
+}
+
+.addBtn {
+    padding: 0.75rem 1.25rem;
+    background: #1a1a1a;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.addBtn:hover:not(:disabled) {
+    background: #333;
+}
+
+.addBtn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+    .actionButtons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .greeting {
+        font-size: 2rem;
+    }
+}
