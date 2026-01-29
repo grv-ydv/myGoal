@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { EB_Garamond, Inter } from 'next/font/google';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { AuthProvider } from '@/contexts/AuthContext';
 import './globals.css';
 
@@ -31,6 +32,7 @@ export default function RootLayout({
         <AuthProvider>
           {children}
         </AuthProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
