@@ -30,6 +30,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 1. Copy `.env.example` to `.env.local`.
 2. Fill in Firebase and Gemini values.
 3. Never commit real keys to git.
+4. In Vercel, add the same variables under **Project Settings → Environment Variables** for Production/Preview/Development.
 
 ```bash
 cp .env.example .env.local

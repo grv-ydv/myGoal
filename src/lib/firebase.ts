@@ -12,8 +12,16 @@ const firebaseConfig = {
     measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
-if (!firebaseConfig.apiKey) {
-    throw new Error('Missing NEXT_PUBLIC_FIREBASE_API_KEY. Configure Firebase env vars before running the app.');
+const missingFirebaseVars = Object.entries(firebaseConfig)
+    .filter(([, value]) => !value)
+    .map(([key]) => key);
+
+if (typeof window !== 'undefined' && missingFirebaseVars.length > 0) {
+    throw new Error(`Missing Firebase env vars: ${missingFirebaseVars.join(', ')}. Configure .env.local before running the app.`);
+}
+
+if (typeof window === 'undefined' && missingFirebaseVars.length > 0) {
+    console.warn(`Firebase env vars missing during server build/runtime: ${missingFirebaseVars.join(', ')}.`);
 }
 
 // Initialize Firebase (prevent duplicate initialization in dev)
