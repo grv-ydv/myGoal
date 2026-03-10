@@ -7,8 +7,8 @@ export const revalidate = 0;
 // List of models to try, in order of preference
 const MODELS = [
   'gemini-3-flash-preview',
+  'gemini-2.5-flash',
   'gemini-2.0-flash',
-  'gemini-flash-latest',
 ];
 
 async function callGeminiAPI(model: string, apiKey: string, prompt: string, signal: AbortSignal) {

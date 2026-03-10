@@ -29,6 +29,7 @@ async function callGeminiAPI(model: string, apiKey: string, prompt: string, sign
           topK: 40,
           topP: 0.95,
           maxOutputTokens: 8192,
+          responseMimeType: "application/json",
         },
       }),
       signal,

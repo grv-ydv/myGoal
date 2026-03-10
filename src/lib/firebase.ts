@@ -20,9 +20,14 @@ export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 
 // Firestore with memory-only cache (no offline persistence = faster initial load)
-export const db = getApps().length === 1
-    ? initializeFirestore(app, { localCache: memoryLocalCache() })
-    : getFirestore(app);
+let db: ReturnType<typeof getFirestore>;
+try {
+    db = initializeFirestore(app, { localCache: memoryLocalCache() });
+} catch {
+    // Already initialized (e.g. during hot reload in dev)
+    db = getFirestore(app);
+}
+export { db };
 
 // Helper: wrap Firestore calls with a timeout for faster failure
 export function withTimeout<T>(promise: Promise<T>, timeoutMs: number = 5000): Promise<T> {
