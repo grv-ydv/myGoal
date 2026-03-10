@@ -24,6 +24,19 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+
+## Environment Setup
+
+1. Copy `.env.example` to `.env.local`.
+2. Fill in Firebase and Gemini values.
+3. Never commit real keys to git.
+
+```bash
+cp .env.example .env.local
+```
+
+> Note: Firebase Web API keys are not secret credentials by themselves, but they should still be restricted in Google Cloud (API restrictions + HTTP referrer restrictions) and not hard-coded in the repository.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

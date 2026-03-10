@@ -3,14 +3,18 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore, initializeFirestore, memoryLocalCache } from 'firebase/firestore';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyD85mrLZxE2q1Xrx1dfVcXRgodowLWYfzE",
-    authDomain: "mygoal-ai-planner-86a11.firebaseapp.com",
-    projectId: "mygoal-ai-planner-86a11",
-    storageBucket: "mygoal-ai-planner-86a11.firebasestorage.app",
-    messagingSenderId: "119705216292",
-    appId: "1:119705216292:web:3f8c4bf1c3d2ea5c733fb1",
-    measurementId: "G-H1WDKBQCJY"
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
+
+if (!firebaseConfig.apiKey) {
+    throw new Error('Missing NEXT_PUBLIC_FIREBASE_API_KEY. Configure Firebase env vars before running the app.');
+}
 
 // Initialize Firebase (prevent duplicate initialization in dev)
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
