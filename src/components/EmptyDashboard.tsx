@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createTask, Task } from '@/lib/firestore';
 import { withTimeout } from '@/lib/firebase';
@@ -104,7 +105,7 @@ export default function EmptyDashboard({
                     >
                         <div className={styles.userAvatar}>
                             {userPhoto ? (
-                                <img src={userPhoto} alt="" />
+                                <Image src={userPhoto} alt="" width={32} height={32} />
                             ) : (
                                 <span>{(userEmail || 'U')[0].toUpperCase()}</span>
                             )}

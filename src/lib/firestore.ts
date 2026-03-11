@@ -9,7 +9,6 @@ import {
     where,
     getDocs,
     orderBy,
-    limit,
     serverTimestamp,
     Timestamp
 } from 'firebase/firestore';
@@ -244,6 +243,14 @@ export async function getTasksForDate(uid: string, date: string): Promise<Task[]
 export async function getTasksForPlan(uid: string, planId: string): Promise<Task[]> {
     const tasksRef = collection(db, 'users', uid, 'tasks');
     const q = query(tasksRef, where('planId', '==', planId), orderBy('dayNumber'));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Task));
+}
+
+// Batch fetch all tasks for a user (avoids N+1 when loading multiple plans)
+export async function getAllTasksForUser(uid: string): Promise<Task[]> {
+    const tasksRef = collection(db, 'users', uid, 'tasks');
+    const q = query(tasksRef, orderBy('dayNumber'));
     const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Task));
 }

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import styles from './profile.module.css';
@@ -57,9 +58,11 @@ export default function ProfilePage() {
                 <div className={styles.profileCard}>
                     <div className={styles.avatarSection}>
                         {user.photoURL ? (
-                            <img
+                            <Image
                                 src={user.photoURL}
                                 alt="Profile"
+                                width={80}
+                                height={80}
                                 className={styles.avatar}
                             />
                         ) : (

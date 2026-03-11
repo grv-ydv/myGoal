@@ -46,10 +46,7 @@ export default function QuestionsPage() {
 
     const handleWizardFinish = async (answers: Record<number, string>) => {
         setIsLoading(true);
-        console.log('🚀 [QuestionsPage] Starting plan generation with answers:', answers);
-
         try {
-            console.log('📡 [QuestionsPage] Sending request to /api/generate-plan...');
             const response = await fetch('/api/generate-plan', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -59,16 +56,12 @@ export default function QuestionsPage() {
                 }),
             });
 
-            console.log('📡 [QuestionsPage] Response status:', response.status);
             const data = await response.json();
-            console.log('📦 [QuestionsPage] Response data:', data);
 
             if (data.error) {
                 console.error('❌ [QuestionsPage] Server returned error:', data.error, data.details);
                 throw new Error(data.details ? `${data.error}: ${data.details}` : data.error);
             }
-
-            console.log('✅ [QuestionsPage] Plan generated successfully:', data.title);
 
             // Save plan to sessionStorage FIRST (for immediate use)
             const saved = sessionStorage.getItem(STORAGE_KEY);
@@ -76,14 +69,12 @@ export default function QuestionsPage() {
             sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ ...current, planData: data }));
 
             // Redirect immediately - don't wait for Firestore
-            console.log('🔄 [QuestionsPage] Redirecting to /plan...');
             router.push('/plan');
 
             // Save to Firestore in background (non-blocking)
             if (user?.uid) {
                 save_goal(user.uid, data, goal)
                     .then((savedPlan) => {
-                        console.log('✅ Plan saved to Firestore with ID:', savedPlan.id);
                         // Update sessionStorage with the real Firestore ID so plan/page.tsx can dedupe
                         const currentSaved = sessionStorage.getItem(STORAGE_KEY);
                         if (currentSaved) {
