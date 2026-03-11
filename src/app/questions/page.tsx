@@ -14,7 +14,7 @@ export default function QuestionsPage() {
     const router = useRouter();
     const { user } = useAuth();
     const [goal, setGoal] = useState('');
-    const [questions, setQuestions] = useState<{ id: number; text: string; type: string; options?: string[] }[]>([]);
+    const [questions, setQuestions] = useState<{ id: number; text: string; type: 'text' | 'choice'; options?: string[] }[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
