@@ -121,10 +121,10 @@ Do not include markdown formatting. Just the raw JSON object.`;
                     const errorText = await response.text();
                     console.error('❌ [generate-questions] Gemini API Error:', errorText);
                     throw new Error(`Gemini API returned ${response.status}: ${errorText}`);
-                } catch (e: any) {
-                    if (e.name === 'AbortError') throw e;
-                    lastError = e;
-                    console.log(`⚠️ [generate-questions] Error with ${model}:`, e.message);
+                } catch (e: unknown) {
+                    if (e instanceof Error && e.name === 'AbortError') throw e;
+                    lastError = e instanceof Error ? e : new Error(String(e));
+                    console.log(`⚠️ [generate-questions] Error with ${model}:`, lastError.message);
                 }
             }
 
@@ -159,10 +159,10 @@ Do not include markdown formatting. Just the raw JSON object.`;
         }
 
         return NextResponse.json(data);
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('❌ [generate-questions] Error:', error);
         return NextResponse.json(
-            { error: 'Failed to generate questions', details: error.message },
+            { error: 'Failed to generate questions', details: error instanceof Error ? error.message : String(error) },
             { status: 500 }
         );
     }

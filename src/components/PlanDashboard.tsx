@@ -45,7 +45,9 @@ interface PlanResult {
 }
 
 interface PlanDashboardProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     plan: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     allPlans?: any[];  // All user's plans for multi-goal support
     goal: string;
     userId: string;
@@ -533,7 +535,7 @@ export default function PlanDashboard({ plan: initialPlan, allPlans = [], goal, 
             if (userId) {
                 // Determine which plan ID to save to
                 // If we are here, we are not on 'all' goals OR we only have 1 goal
-                let targetGoalId = currentPlan.goals?.[0]?.id || (goals.length > 0 ? goals[0].id : null);
+                const targetGoalId = currentPlan.goals?.[0]?.id || (goals.length > 0 ? goals[0].id : null);
                 // If the returned plan doesn't have ID, inject it
 
                 // Reuse save_goal logic

@@ -119,10 +119,10 @@ Do not include markdown or other formatting. Just raw JSON.`;
           const errorText = await response.text();
           console.error('❌ [modify-plan] Gemini API Error:', errorText);
           throw new Error(`Gemini API returned ${response.status}: ${errorText}`);
-        } catch (e: any) {
-          if (e.name === 'AbortError') throw e;
-          lastError = e;
-          console.log(`⚠️ [modify-plan] Error with ${model}:`, e.message);
+        } catch (e: unknown) {
+          if (e instanceof Error && e.name === 'AbortError') throw e;
+          lastError = e instanceof Error ? e : new Error(String(e));
+          console.log(`⚠️ [modify-plan] Error with ${model}:`, lastError.message);
         }
       }
 
@@ -156,10 +156,10 @@ Do not include markdown or other formatting. Just raw JSON.`;
     }
 
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error modifying plan:', error);
     return NextResponse.json(
-      { error: 'Failed to modify plan', details: error.message },
+      { error: 'Failed to modify plan', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }

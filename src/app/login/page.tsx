@@ -41,8 +41,8 @@ export default function LoginPage() {
                 await signIn(email, password);
             }
             router.push('/');
-        } catch (err: any) {
-            setError(err.message || 'Authentication failed');
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Authentication failed');
         } finally {
             setLoading(false);
         }
@@ -54,8 +54,8 @@ export default function LoginPage() {
         try {
             await signInWithGoogle();
             router.push('/');
-        } catch (err: any) {
-            setError(err.message || 'Google sign-in failed');
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Google sign-in failed');
         } finally {
             setLoading(false);
         }
@@ -71,8 +71,8 @@ export default function LoginPage() {
             await resetPassword(email);
             setResetSent(true);
             setError('');
-        } catch (err: any) {
-            setError(err.message || 'Failed to send reset email');
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Failed to send reset email');
         } finally {
             setLoading(false);
         }

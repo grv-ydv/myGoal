@@ -52,8 +52,8 @@ export default function EmptyDashboard({
             completed: false,
             type: 'task',
             isUserCreated: true,
-            createdAt: {} as any,
-            updatedAt: {} as any,
+            createdAt: {} as Task['createdAt'],
+            updatedAt: {} as Task['updatedAt'],
         };
 
         setTasks([...tasks, tempTask]);
@@ -149,7 +149,7 @@ export default function EmptyDashboard({
             {/* Today's Tasks */}
             <div className={styles.tasksSection}>
                 <div className={styles.sectionHeader}>
-                    <h2 className={styles.sectionTitle}>Today's Tasks</h2>
+                    <h2 className={styles.sectionTitle}>Today&apos;s Tasks</h2>
                     {tasks.length > 0 && (
                         <span className={styles.taskCount}>
                             {completedCount}/{tasks.length}
