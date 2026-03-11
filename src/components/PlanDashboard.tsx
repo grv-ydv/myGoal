@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
@@ -73,9 +74,6 @@ export default function PlanDashboard({ plan: initialPlan, allPlans = [], goal, 
     const { logout } = useAuth();
     const [showProfileMenu, setShowProfileMenu] = useState(false);
 
-    console.log('📊 [PlanDashboard] Rendered with plan:', initialPlan?.title, 'ID:', initialPlan?.id);
-    console.log('📊 [PlanDashboard] Week 1 Day 1 Tasks:', initialPlan?.weeks?.[0]?.days?.[0]?.tasks?.length);
-
     // Initialize goals from allPlans (Firestore) with actual task counts from initialPlan
     const [goals, setGoals] = useState<Goal[]>(() => {
         // If we have multiple plans from Firestore, use them as goals
@@ -125,7 +123,6 @@ export default function PlanDashboard({ plan: initialPlan, allPlans = [], goal, 
         );
 
         if (hasRealData || initialPlan?.id?.startsWith('new')) {
-            console.log('📦 [PlanDashboard] Using initialPlan from props:', initialPlan?.title);
             // Clear any stale sessionStorage
             if (typeof window !== 'undefined') {
                 sessionStorage.removeItem(PLAN_STORAGE_KEY);
@@ -141,7 +138,6 @@ export default function PlanDashboard({ plan: initialPlan, allPlans = [], goal, 
                     const parsed = JSON.parse(saved);
                     // Only use if it has actual data
                     if (parsed?.weeks?.some((w: Week) => w.days?.some((d: Day) => d.tasks?.length > 0))) {
-                        console.log('📦 Using plan from sessionStorage');
                         return parsed;
                     }
                 } catch (e) {
@@ -256,25 +252,25 @@ export default function PlanDashboard({ plan: initialPlan, allPlans = [], goal, 
     }, []);
 
     // Helper to get flat list of days for Calendar Strip
-    const allDaysFlat = currentPlan.weeks.flatMap(w => w.days);
+    const allDaysFlat = useMemo(() => currentPlan.weeks.flatMap(w => w.days), [currentPlan.weeks]);
 
     // Helper to calculate real date from day number
-    const getDateForDay = (dayNum: number): Date => {
+    const getDateForDay = useCallback((dayNum: number): Date => {
         const date = new Date(startDate);
         date.setDate(date.getDate() + dayNum - 1);
         return date;
-    };
+    }, [startDate]);
 
     // Format date for display
-    const formatDate = (date: Date): { weekday: string; day: number; month: string } => ({
+    const formatDate = useCallback((date: Date): { weekday: string; day: number; month: string } => ({
         weekday: date.toLocaleDateString('en-US', { weekday: 'short' }),
         day: date.getDate(),
         month: date.toLocaleDateString('en-US', { month: 'short' })
-    });
+    }), []);
 
 
 
-    const handleModifyPlan = async () => {
+    const handleModifyPlan = useCallback(async () => {
         if (!feedback.trim()) return;
         setIsModifying(true);
         try {
@@ -294,10 +290,10 @@ export default function PlanDashboard({ plan: initialPlan, allPlans = [], goal, 
         } finally {
             setIsModifying(false);
         }
-    };
+    }, [feedback, currentPlan]);
 
     // Unified Task Updates
-    const updateTask = async (taskId: string, updates: Partial<Task>) => {
+    const updateTask = useCallback(async (taskId: string, updates: Partial<Task>) => {
         // Optimistic update
         const newPlan = { ...currentPlan };
         let taskUpdated = false;
@@ -321,7 +317,7 @@ export default function PlanDashboard({ plan: initialPlan, allPlans = [], goal, 
         }
 
         if (taskUpdated) setCurrentPlan(newPlan);
-    };
+    }, [currentPlan, userId]);
 
     const addTask = async () => {
         if (!newUserTask.trim() || !selectedDayNum) return;
@@ -423,13 +419,18 @@ export default function PlanDashboard({ plan: initialPlan, allPlans = [], goal, 
         }
     };
 
-    const deleteTask = (taskId: string) => {
+    const deleteTask = useCallback((taskId: string) => {
         // Optimistic delete
-        const newPlan = { ...currentPlan };
-        newPlan.weeks.forEach(w => w.days.forEach(d => {
-            d.tasks = d.tasks.filter(t => t.id !== taskId);
-        }));
-        setCurrentPlan(newPlan);
+        setCurrentPlan(prev => {
+            const newPlan = { ...prev, weeks: prev.weeks.map(w => ({
+                ...w,
+                days: w.days.map(d => ({
+                    ...d,
+                    tasks: d.tasks.filter(t => t.id !== taskId)
+                }))
+            }))};
+            return newPlan;
+        });
 
         // Persist
         if (userId) {
@@ -437,7 +438,7 @@ export default function PlanDashboard({ plan: initialPlan, allPlans = [], goal, 
                 console.error("Failed to delete task:", err)
             );
         }
-    };
+    }, [userId]);
 
     // Start editing a task
     const startEdit = (task: Task) => {
@@ -543,7 +544,6 @@ export default function PlanDashboard({ plan: initialPlan, allPlans = [], goal, 
                 // We need title, goal name etc.
                 const goalTitle = data.goal || data.title || 'Updated Goal';
                 await firestoreService.save_goal(userId, { ...data, id: targetGoalId }, goalTitle);
-                console.log("Auto-saved modified plan");
             }
 
         } catch (e) {
@@ -722,7 +722,7 @@ export default function PlanDashboard({ plan: initialPlan, allPlans = [], goal, 
                                             onClick={() => setShowProfileMenu(!showProfileMenu)}
                                         >
                                             {userPhoto ? (
-                                                <img src={userPhoto} alt="Profile" className={styles.profileImage} />
+                                                <Image src={userPhoto} alt="Profile" width={32} height={32} className={styles.profileImage} />
                                             ) : (
                                                 <div className={styles.profileAvatar}>
                                                     {(userEmail || 'U')[0].toUpperCase()}

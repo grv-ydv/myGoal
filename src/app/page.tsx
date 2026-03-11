@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { getActivePlan, createUserProfile, getUserProfile, createTask } from '@/lib/firestore';
@@ -140,7 +141,7 @@ export default function Home() {
           >
             <div className={styles.userAvatar}>
               {user.photoURL ? (
-                <img src={user.photoURL} alt="" />
+                <Image src={user.photoURL} alt="" width={32} height={32} />
               ) : (
                 <span>{(user.email || 'U')[0].toUpperCase()}</span>
               )}

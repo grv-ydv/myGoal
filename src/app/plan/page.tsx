@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { getAllPlans, getTasksForPlan, Task, Plan } from '@/lib/firestore';
+import { getAllPlans, getAllTasksForUser, Task, Plan } from '@/lib/firestore';
 import PlanDashboard from '@/components/PlanDashboard';
 import styles from '../page.module.css';
 
@@ -67,16 +67,22 @@ export default function PlanPage() {
             if (!user) return;
 
             try {
-                // 1. Load ALL existing goals from Firestore
-                const firestorePlans = await getAllPlans(user.uid).catch((err) => {
-                    console.error('getAllPlans error:', err);
-                    return [];
-                });
+                // 1. Load ALL goals and ALL tasks in parallel (single query each, no N+1)
+                const [firestorePlans, allTasks] = await Promise.all([
+                    getAllPlans(user.uid).catch(() => []),
+                    getAllTasksForUser(user.uid).catch(() => [])
+                ]);
 
-                // 2. Load tasks for each Firestore plan
-                const firestoreGoals: GoalWithTasks[] = await Promise.all(
-                    firestorePlans.map(async (plan) => {
-                        const tasks = await getTasksForPlan(user.uid, plan.id).catch(() => []);
+                // 2. Group tasks by planId, then build goals
+                const tasksByPlan = new Map<string, Task[]>();
+                for (const task of allTasks) {
+                    const planTasks = tasksByPlan.get(task.planId) || [];
+                    planTasks.push(task);
+                    tasksByPlan.set(task.planId, planTasks);
+                }
+
+                const firestoreGoals: GoalWithTasks[] = firestorePlans.map((plan) => {
+                        const tasks = tasksByPlan.get(plan.id) || [];
 
                         // Inject tasks into weeks structure
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -108,8 +114,7 @@ export default function PlanPage() {
                             tasks: tasks.map(t => ({ ...t, goalId: plan.id })),
                             isNew: false
                         };
-                    })
-                );
+                    });
 
                 // 3. Check sessionStorage for a NEW goal being created
                 const saved = sessionStorage.getItem(STORAGE_KEY);
@@ -147,8 +152,6 @@ export default function PlanPage() {
                                 tasks: [],
                                 isNew: true
                             };
-                            console.log('📦 New goal from sessionStorage:', newGoal.title);
-
                             // Clear sessionStorage after reading - REMOVED to fix persistence issue
                             // sessionStorage.removeItem(STORAGE_KEY);
                         }
@@ -178,9 +181,7 @@ export default function PlanPage() {
 
                     if (!isDuplicate) {
                         mergedGoals = [...firestoreGoals, newGoal];
-                        console.log('📦 Added new goal to list:', newGoal.title);
                     } else {
-                        console.log('📦 Skipping duplicate goal:', newGoal.title);
                         // Clear sessionStorage since it's a duplicate - REMOVED to be safe, but duplicates are handled by logic
                         // sessionStorage.removeItem(STORAGE_KEY);
                     }
@@ -209,18 +210,8 @@ export default function PlanPage() {
         }
     }, [user, authLoading]);
 
-    if (authLoading || isLoading) {
-        return (
-            <main className={styles.main}>
-                <div className={styles.loadingState}>
-                    Loading...
-                </div>
-            </main>
-        );
-    }
-
     // Create a merged view for the calendar (all tasks from all goals)
-    const mergedPlan = allGoals.length > 0 ? {
+    const mergedPlan = useMemo(() => allGoals.length > 0 ? {
         ...allGoals[0],
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         weeks: allGoals[0].weeks.map((week: any, wi: number) => ({
@@ -234,7 +225,17 @@ export default function PlanPage() {
                 )
             }))
         }))
-    } : createEmptyPlan();
+    } : createEmptyPlan(), [allGoals]);
+
+    if (authLoading || isLoading) {
+        return (
+            <main className={styles.main}>
+                <div className={styles.loadingState}>
+                    Loading...
+                </div>
+            </main>
+        );
+    }
 
     return (
         <main className={styles.main}>
