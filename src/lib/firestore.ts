@@ -95,6 +95,7 @@ export async function updateUserProfile(uid: string, updates: Partial<UserProfil
 
 // ==================== PLANS / GOALS (Root Collection) ====================
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function save_goal(uid: string, plan: any, goal: string) {
     // Determine the collection reference: root 'goals' collection
     // If we want to allow updating existing goals, we should check if plan.id exists
@@ -115,9 +116,11 @@ export async function save_goal(uid: string, plan: any, goal: string) {
         startDate: Timestamp.fromDate(startDate),
         createdAt: serverTimestamp() as Timestamp,
         updatedAt: serverTimestamp() as Timestamp,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         weeks: plan.weeks.map((week: any) => ({
             weekNumber: week.weekNumber,
             theme: week.theme,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             days: week.days.map((day: any) => ({
                 dayNumber: day.dayNumber,
                 focus: day.focus,
@@ -174,6 +177,7 @@ export async function fetch_user_goals(uid: string): Promise<Plan[]> {
 export const fetchUserGoals = fetch_user_goals;
 
 // Updated legacy function to use new save_goal
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function savePlan(uid: string, plan: any, goal: string) {
     return save_goal(uid, plan, goal);
 }

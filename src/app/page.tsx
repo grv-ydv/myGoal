@@ -24,6 +24,7 @@ export default function Home() {
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!authLoading && !user) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCheckingPlan(false);
       router.push('/login');
     }

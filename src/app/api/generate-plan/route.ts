@@ -102,7 +102,6 @@ Ensure tasks are actionable and specific.`;
       controller.abort();
     }, 90000);
 
-    let lastError: Error | null = null;
     let response: Response | null = null;
     const errors: string[] = [];
 
@@ -131,11 +130,12 @@ Ensure tasks are actionable and specific.`;
           // Other errors - throw immediately
           console.error('❌ [generate-plan] Gemini API Error:', errorText);
           throw new Error(`Gemini API returned ${response.status}: ${errorText}`);
-        } catch (e: any) {
-          if (e.name === 'AbortError') throw e;
+        } catch (e: unknown) {
+          if (e instanceof Error && e.name === 'AbortError') throw e;
           // Capture the error but continue to the next model/attempt
-          console.log(`⚠️ [generate-plan] Error with ${model}:`, e.message);
-          errors.push(`${model}: ${e.message}`);
+          const message = e instanceof Error ? e.message : String(e);
+          console.log(`⚠️ [generate-plan] Error with ${model}:`, message);
+          errors.push(`${model}: ${message}`);
         }
       }
 
@@ -170,10 +170,10 @@ Ensure tasks are actionable and specific.`;
     }
 
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('❌ [generate-plan] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to generate plan', details: error.message },
+      { error: 'Failed to generate plan', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }

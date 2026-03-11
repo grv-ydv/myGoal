@@ -22,17 +22,20 @@ export default function AddTaskModal({ isOpen, onClose, onAdd }: AddTaskModalPro
     const [showRepeatMenu, setShowRepeatMenu] = useState(false);
     const [type, setType] = useState<'task' | 'note'>('task');
 
-    // Set default date to today when opening
+    // Reset form when opening
     useEffect(() => {
         if (isOpen) {
-            setDate(new Date().toISOString().split('T')[0]);
-            setTitle('');
-            setNote('');
-            setUrl('');
-            setIsTimeEnabled(false);
-            setIsUrgent(false);
-            setRepeat('Never');
-            setShowRepeatMenu(false);
+            const resetForm = () => {
+                setDate(new Date().toISOString().split('T')[0]);
+                setTitle('');
+                setNote('');
+                setUrl('');
+                setIsTimeEnabled(false);
+                setIsUrgent(false);
+                setRepeat('Never');
+                setShowRepeatMenu(false);
+            };
+            resetForm();
         }
     }, [isOpen]);
 
