@@ -2,10 +2,24 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { useAuth } from '@/contexts/AuthContext';
 import { getAllPlans, getAllTasksForUser, Task, Plan } from '@/lib/firestore';
-import PlanDashboard from '@/components/PlanDashboard';
 import styles from '../page.module.css';
+
+// Code-split PlanDashboard (1000+ lines) so /plan loads instantly
+const PlanDashboard = dynamic(() => import('@/components/PlanDashboard'), {
+    loading: () => (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', color: '#888' }}>
+            <div style={{ textAlign: 'center' }}>
+                <div style={{ width: 28, height: 28, border: '3px solid #333', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.6s linear infinite', margin: '0 auto 12px' }} />
+                <p>Loading dashboard...</p>
+                <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+            </div>
+        </div>
+    ),
+    ssr: false,
+});
 
 const STORAGE_KEY = 'myGoal_appData';
 

@@ -16,6 +16,7 @@ export default function QuestionsPage() {
     const [goal, setGoal] = useState('');
     const [questions, setQuestions] = useState<{ id: number; text: string; type: 'text' | 'choice'; options?: string[] }[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [loadingStep, setLoadingStep] = useState(0);
 
     useEffect(() => {
         // Load data from sessionStorage
@@ -44,8 +45,17 @@ export default function QuestionsPage() {
         setIsLoading(false);
     }, [router]);
 
+    // Prefetch /plan so navigation is instant after generation
+    useEffect(() => {
+        router.prefetch('/plan');
+    }, [router]);
+
     const handleWizardFinish = async (answers: Record<number, string>) => {
         setIsLoading(true);
+        setLoadingStep(0);
+        const stepTimer = setInterval(() => {
+            setLoadingStep(prev => Math.min(prev + 1, 3));
+        }, 3000);
         try {
             const response = await fetch('/api/generate-plan', {
                 method: 'POST',
@@ -57,6 +67,7 @@ export default function QuestionsPage() {
             });
 
             const data = await response.json();
+            clearInterval(stepTimer);
 
             if (data.error) {
                 console.error('❌ [QuestionsPage] Server returned error:', data.error, data.details);
@@ -92,7 +103,7 @@ export default function QuestionsPage() {
                     .catch((err) => console.error('Failed to save to Firestore:', err));
             }
         } catch (error) {
-            console.error("❌ [QuestionsPage] Failed to generate plan:", error);
+            clearInterval(stepTimer);
             const errorMessage = error instanceof Error ? error.message : "Unknown error";
             alert(`Failed to generate plan: ${errorMessage}`);
             setIsLoading(false);
@@ -100,10 +111,13 @@ export default function QuestionsPage() {
     };
 
     if (isLoading) {
+        const steps = ['Analyzing your answers...', 'Building your daily plan...', 'Organizing tasks by week...', 'Finalizing your plan...'];
         return (
             <main className={styles.main}>
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8 text-gray-500 font-inter">
-                    Generating your perfect plan...
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ textAlign: 'center', marginTop: '4rem', color: '#888', fontFamily: 'var(--font-sans)' }}>
+                    <div style={{ width: 32, height: 32, border: '3px solid #333', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.6s linear infinite', margin: '0 auto 16px' }} />
+                    <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+                    <p style={{ fontSize: '1.1rem' }}>{steps[loadingStep]}</p>
                 </motion.div>
             </main>
         );

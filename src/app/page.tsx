@@ -19,8 +19,15 @@ export default function Home() {
   const { user, loading: authLoading, logout } = useAuth();
   const [goal, setGoal] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState(0);
   const [checkingPlan, setCheckingPlan] = useState(true);
   const [showUserMenu, setShowUserMenu] = useState(false);
+
+  // Prefetch likely destinations so navigation is instant
+  useEffect(() => {
+    router.prefetch('/plan');
+    router.prefetch('/questions');
+  }, [router]);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -74,6 +81,12 @@ export default function Home() {
     if (!goal.trim()) return;
 
     setIsLoading(true);
+    setLoadingStep(0);
+
+    // Animate through steps while waiting for API
+    const stepTimer = setInterval(() => {
+      setLoadingStep(prev => Math.min(prev + 1, 2));
+    }, 2500);
 
     try {
       const response = await fetch('/api/generate-questions', {
@@ -84,12 +97,14 @@ export default function Home() {
 
       const data = await response.json();
 
+      clearInterval(stepTimer);
       if (data.questions) {
         // Save to sessionStorage and navigate
         sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ goal, questions: data.questions }));
         router.push('/questions');
       }
     } catch (error) {
+      clearInterval(stepTimer);
       console.error('Failed to submit goal:', error);
       alert('Something went wrong. Please check your API key and try again.');
       setIsLoading(false);
@@ -210,7 +225,9 @@ export default function Home() {
 
           {isLoading && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={styles.loadingText}>
-              Analyzing your goal...
+              <div style={{ width: 28, height: 28, border: '3px solid #333', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.6s linear infinite', margin: '0 auto 16px' }} />
+              <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+              {['Analyzing your goal...', 'Generating personalized questions...', 'Almost ready...'][loadingStep]}
             </motion.div>
           )}
 

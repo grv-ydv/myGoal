@@ -4,11 +4,10 @@ import { NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-// List of models to try, in order of preference
+// Models ordered by speed/reliability — fastest stable model first
 const MODELS = [
-    'gemini-3-flash-preview',
-    'gemini-2.5-flash',
     'gemini-2.0-flash',
+    'gemini-2.5-flash',
 ];
 
 async function callGeminiAPI(model: string, apiKey: string, prompt: string, signal: AbortSignal) {
@@ -32,7 +31,7 @@ async function callGeminiAPI(model: string, apiKey: string, prompt: string, sign
                     temperature: 0.2,
                     topK: 40,
                     topP: 0.95,
-                    maxOutputTokens: 8192,
+                    maxOutputTokens: 1024,
                     responseMimeType: "application/json",
                 },
             }),
@@ -89,46 +88,32 @@ Do not include markdown formatting. Just the raw JSON object.`;
         // Add timeout to prevent infinite hang
         const controller = new AbortController();
         const timeoutId = setTimeout(() => {
-            console.log('⏰ [generate-questions] Request timed out after 60s');
             controller.abort();
-        }, 60000);
+        }, 20000);
 
         let lastError: Error | null = null;
         let response: Response | null = null;
 
-        // Try each model with retry logic
+        // Try each model once — fail fast, move to next
         for (const model of MODELS) {
-            for (let attempt = 1; attempt <= 2; attempt++) {
-                try {
-                    console.log(`🔄 [generate-questions] Trying ${model} (attempt ${attempt})...`);
-                    response = await callGeminiAPI(model, apiKey, prompt, controller.signal);
+            try {
+                response = await callGeminiAPI(model, apiKey, prompt, controller.signal);
 
-                    if (response.ok) {
-                        console.log(`✅ [generate-questions] Success with ${model}`);
-                        break;
-                    }
+                if (response.ok) break;
 
-                    // If 503 (overloaded), wait and retry or try next model
-                    if (response.status === 503 || response.status === 429) {
-                        const errorText = await response.text();
-                        console.log(`⚠️ [generate-questions] ${model} returned ${response.status}, trying next option...`);
-                        lastError = new Error(`${model} returned ${response.status}: ${errorText}`);
-                        await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
-                        continue;
-                    }
-
-                    // Other errors - throw immediately
-                    const errorText = await response.text();
-                    console.error('❌ [generate-questions] Gemini API Error:', errorText);
-                    throw new Error(`Gemini API returned ${response.status}: ${errorText}`);
-                } catch (e: unknown) {
-                    if (e instanceof Error && e.name === 'AbortError') throw e;
-                    lastError = e instanceof Error ? e : new Error(String(e));
-                    console.log(`⚠️ [generate-questions] Error with ${model}:`, lastError.message);
+                // If overloaded, try next model immediately
+                if (response.status === 503 || response.status === 429) {
+                    lastError = new Error(`${model} returned ${response.status}`);
+                    continue;
                 }
-            }
 
-            if (response?.ok) break;
+                // Other errors - throw immediately
+                const errorText = await response.text();
+                throw new Error(`Gemini API returned ${response.status}: ${errorText}`);
+            } catch (e: unknown) {
+                if (e instanceof Error && e.name === 'AbortError') throw e;
+                lastError = e instanceof Error ? e : new Error(String(e));
+            }
         }
 
         clearTimeout(timeoutId);

@@ -4,11 +4,10 @@ import { NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-// List of models to try, in order of preference
+// Models ordered by speed/reliability — fastest stable model first
 const MODELS = [
-  'gemini-3-flash-preview',
-  'gemini-2.5-flash',
   'gemini-2.0-flash',
+  'gemini-2.5-flash',
 ];
 
 async function callGeminiAPI(model: string, apiKey: string, prompt: string, signal: AbortSignal) {
@@ -98,48 +97,33 @@ Ensure tasks are actionable and specific.`;
     // Add timeout to prevent infinite hang
     const controller = new AbortController();
     const timeoutId = setTimeout(() => {
-      console.log('⏰ [generate-plan] Request timed out after 90s');
       controller.abort();
-    }, 90000);
+    }, 30000);
 
     let response: Response | null = null;
     const errors: string[] = [];
 
-    // Try each model with retry logic
+    // Try each model once — fail fast, move to next
     for (const model of MODELS) {
-      for (let attempt = 1; attempt <= 2; attempt++) {
-        try {
-          console.log(`🔄 [generate-plan] Trying ${model} (attempt ${attempt})...`);
-          response = await callGeminiAPI(model, apiKey, prompt, controller.signal);
+      try {
+        response = await callGeminiAPI(model, apiKey, prompt, controller.signal);
 
-          if (response.ok) {
-            console.log(`✅ [generate-plan] Success with ${model}`);
-            break;
-          }
+        if (response.ok) break;
 
-          // If 503 (overloaded), wait and retry or try next model
-          const errorText = await response.text();
-          if (response.status === 503 || response.status === 429) {
-            console.log(`⚠️ [generate-plan] ${model} returned ${response.status}, trying next option...`);
-            errors.push(`${model} (503/429): ${errorText}`);
-            // Wait a bit before retry
-            await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
-            continue;
-          }
-
-          // Other errors - throw immediately
-          console.error('❌ [generate-plan] Gemini API Error:', errorText);
-          throw new Error(`Gemini API returned ${response.status}: ${errorText}`);
-        } catch (e: unknown) {
-          if (e instanceof Error && e.name === 'AbortError') throw e;
-          // Capture the error but continue to the next model/attempt
-          const message = e instanceof Error ? e.message : String(e);
-          console.log(`⚠️ [generate-plan] Error with ${model}:`, message);
-          errors.push(`${model}: ${message}`);
+        // If overloaded, try next model immediately
+        if (response.status === 503 || response.status === 429) {
+          errors.push(`${model}: ${response.status}`);
+          continue;
         }
-      }
 
-      if (response?.ok) break;
+        // Other errors - throw immediately
+        const errorText = await response.text();
+        throw new Error(`Gemini API returned ${response.status}: ${errorText}`);
+      } catch (e: unknown) {
+        if (e instanceof Error && e.name === 'AbortError') throw e;
+        const message = e instanceof Error ? e.message : String(e);
+        errors.push(`${model}: ${message}`);
+      }
     }
 
     clearTimeout(timeoutId);
